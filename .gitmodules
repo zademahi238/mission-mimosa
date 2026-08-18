@@ -7,3 +7,6 @@
 [submodule "lerobot"]
 	path = lerobot
 	url = https://github.com/huggingface/lerobot.git
+[submodule "leflexitac"]
+	path = leflexitac
+	url = https://github.com/TNA001-AI/lerobot_tactile.git
