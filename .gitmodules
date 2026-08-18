@@ -1,3 +1,6 @@
 [submodule "bsp"]
 	path = bsp
 	url = https://github.com/thibauts/b-spline.git
+[submodule "flexitac"]
+	path = flexitac
+	url = https://github.com/FlexiTac/FlexiTac_Hardware_Repo.git
