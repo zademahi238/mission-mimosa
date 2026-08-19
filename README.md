@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <i>Giving robots the ability to see, feel, and manipulate.</i>
+  <i>Giving robots a 'sense of touch'.</i>
 </p>
 
 ---
@@ -86,10 +86,10 @@ For the policy implementation and setup:
 
 Set up the components in the following order:
 
-**1.** [FlexiTac](./FlexiTac) → Tactile hardware
-**2.** [LeRobot](./lerobot) → SO-101 & robot learning
-**3.** [LeFlexiTac](./LeFlexiTac) → Vision + tactile integration
-**4.** [BSP](./BSP) → Manipulation policy
+**1.** [FlexiTac](./FlexiTac) → Tactile hardware <br>
+**2.** [LeRobot](./lerobot) → SO-101 & robot learning <br>
+**3.** [LeFlexiTac](./LeFlexiTac) → Vision + tactile integration <br>
+**4.** [BSP](./BSP) → Manipulation policy <br>
 
 ---
 
