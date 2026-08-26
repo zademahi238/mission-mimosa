@@ -57,10 +57,10 @@ In short: *look at the image, guess the noise, remove it, repeat.*
 
 ### Demo / Rollout Videos
 > Add video/GIF of the arm executing tasks using this policy.
-![Diffusion Policy rollout demo](media/Diffusion_inference.gif)
+![Diffusion Policy rollout demo](../../assets/Diffusion_inference.gif)
 ### Architecture Diagram
 > Add a simple visual of the pipeline.
-![Denoising process](media/Diffusion_pipeline.png)
+![Denoising process](../../assets/Diffusion_pipeline.png)
 ---
 
 ## Changes / Iteration Log
