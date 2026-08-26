@@ -36,7 +36,7 @@ Our sensor has a **16 × 32 array**, giving a total of **512 sensing elements (t
              ESP32
              
 ```
-![Flexitac Sensor](mission-mimosa/assets/flexitac.png)
+![Flexitac Sensor](../../assets/flexitac.png)
 
 For more details about the sensing mechanism, refer to the [FlexiTac paper](https://arxiv.org/abs/2604.28156).
 
@@ -93,7 +93,7 @@ The ESP32 handles the readout process and sends the sensor values to the host co
 
 The firmware has been successfully flashed and the system is currently producing sensor readings.
 
-![Firmware flashed](assets/output.jpg)
+![Firmware flashed](../../assets/output.jpg)
 
 *ESP32 connected to the FlexiTac readout system.*
 
@@ -107,7 +107,7 @@ We first assembled the FlexiTac sensor hardware and prepared it for connection t
 
 The **16 × 32 readout board** was then ordered and received for testing.
 
-![Readout Board](assets/Board.jpg)
+![Readout Board](../../assets/Board.jpg)
 
 *FlexiTac sensor assembly.*
 
@@ -119,7 +119,7 @@ The setup did not work as expected. Since there were a large number of jumper-wi
 
 Because of this, we decided to move towards designing our own PCB.
 
-![Jumper Wire Setup](mission-mimosa/assets/jumper_wire.png)
+![Jumper Wire Setup](../../assets/jumper_wire.png)
 
 *Initial manually wired readout setup.*
 
