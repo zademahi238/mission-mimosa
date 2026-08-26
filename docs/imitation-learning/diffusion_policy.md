@@ -55,13 +55,25 @@ In short: *look at the image, guess the noise, remove it, repeat.*
 
 ## Media
 
-### Demo / Rollout Videos
-> Add video/GIF of the arm executing tasks using this policy.
-![Diffusion Policy rollout demo](../../assets/Diffusion_inference.gif)
-### Architecture Diagram
-> Add a simple visual of the pipeline.
-![Denoising process](../../assets/Diffusion_pipeline.png)
----
+### Diffusion Policy Rollout
+
+<p align="center">
+  <img src="../../assets/Diffusion_inference.gif" alt="Diffusion Policy rollout demo" width="700"/>
+</p>
+
+<p align="center">
+  <em>Diffusion Policy rollout on the SO-101 arm.</em>
+</p>
+
+### Diffusion Policy Pipeline
+
+<p align="center">
+  <img src="../../assets/Diffusion_pipeline.png" alt="Diffusion Policy denoising pipeline" width="800"/>
+</p>
+
+<p align="center">
+  <em>Diffusion Policy denoising pipeline.</em>
+</p>
 
 ## Changes / Iteration Log
 > Keep this updated as you tweak things — helps track what worked and what didn't.
@@ -72,8 +84,9 @@ In short: *look at the image, guess the noise, remove it, repeat.*
 |  | Switched to DDIM sampler for inference | Noticeably better results, likely due to faster and more stable sampling compared to the standard sampler |
 ---
 
+
 ## Known Issues / Limitations
-> e.g. slow inference due to multiple denoising steps, sensitive to hyperparameters, etc.
-This policy's inference is very jerky.
-This policy needs a fixed setup and is bad to changes.
--
+1. Slow inference due to multiple denoising steps, sensitive to hyperparameters, etc.
+2. This policy's inference is very jerky.
+3. This policy needs a fixed setup and is bad to changes.
+
