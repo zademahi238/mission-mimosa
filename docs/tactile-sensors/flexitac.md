@@ -36,7 +36,7 @@ Our sensor has a **16 × 32 array**, giving a total of **512 sensing elements (t
              ESP32
              
 ```
-![Flexitac Sensor](assets/flexitac.png)
+![Flexitac Sensor](mission-mimosa/assets/flexitac.png)
 
 For more details about the sensing mechanism, refer to the [FlexiTac paper](https://arxiv.org/abs/2604.28156).
 
@@ -65,7 +65,7 @@ The 16 × 32 readout board was ordered and received for the project. We first ex
 | MUX S1               |    GPIO 33 |
 | MUX S2               |    GPIO 12 |
 
-![ Assembled FlexiTac Sensor](assets/IMG_3635.png)
+![ Assembled FlexiTac Sensor](mission-mimosa/assets/IMG_3635.png)
 
 *FlexiTac sensor used in the Mission Mimosa setup.*
 
@@ -119,7 +119,7 @@ The setup did not work as expected. Since there were a large number of jumper-wi
 
 Because of this, we decided to move towards designing our own PCB.
 
-![Jumper Wire Setup](assets/jumper_setup.jpg)
+![Jumper Wire Setup](mission-mimosa/assets/jumper_wire.png)
 
 *Initial manually wired readout setup.*
 
