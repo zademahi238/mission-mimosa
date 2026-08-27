@@ -202,6 +202,6 @@ The tactile sensor is intended to provide additional information about **contact
 ## References
 
 * [FlexiTac Project](https://flexitac.github.io/)
-* [FlexiTac Paper — arXiv:2604.28156](https://arxiv.org/abs/2604.28156)
+* [FlexiTac Paper "arXiv:2604.28156"](https://arxiv.org/abs/2604.28156)
 * [FlexiTac Hardware Repository](https://github.com/FlexiTac/FlexiTac_Hardware_Repo)
 * [LeFlexiTac Documentation](https://tna001-ai.github.io/LeFlexiTac/docs.html)

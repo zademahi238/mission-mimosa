@@ -198,7 +198,7 @@ The original eFlesh work also demonstrates its use in slip detection and visuo-t
 
 ## References
 
-* [eFlesh Paper — arXiv:2506.09994](https://arxiv.org/abs/2506.09994)
+* [eFlesh Paper "arXiv:2506.09994"](https://arxiv.org/abs/2506.09994)
 * [eFlesh GitHub Repository](https://github.com/notvenky/eFlesh)
 * [eFlesh Project Website](https://e-flesh.com/)
 * [AnySkin](https://any-skin.github.io/)
