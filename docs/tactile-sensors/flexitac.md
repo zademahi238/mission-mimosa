@@ -65,7 +65,7 @@ The 16 × 32 readout board was ordered and received for the project. We first ex
 | MUX S1               |    GPIO 33 |
 | MUX S2               |    GPIO 12 |
 
-![ Assembled FlexiTac Sensor](mission-mimosa/assets/IMG_3635.png)
+![ Assembled FlexiTac Sensor](../../assets/fpc.png)
 
 *FlexiTac sensor used in the Mission Mimosa setup.*
 
@@ -93,7 +93,7 @@ The ESP32 handles the readout process and sends the sensor values to the host co
 
 The firmware has been successfully flashed and the system is currently producing sensor readings.
 
-![Firmware flashed](../../assets/output.jpg)
+![Firmware flashed](../../assets/visualization.gif)
 
 *ESP32 connected to the FlexiTac readout system.*
 
@@ -107,7 +107,7 @@ We first assembled the FlexiTac sensor hardware and prepared it for connection t
 
 The **16 × 32 readout board** was then ordered and received for testing.
 
-![Readout Board](../../assets/Board.jpg)
+![Readout Board](../../assets/pcb.png)
 
 *FlexiTac sensor assembly.*
 
