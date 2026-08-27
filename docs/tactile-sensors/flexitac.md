@@ -1,60 +1,81 @@
 # FlexiTac Tactile Sensor
 
 **Mission Mimosa | Tactile Sensing**
----
 
 ## Overview
 
-[FlexiTac](https://flexitac.github.io/) is a flexible tactile sensing platform designed for robotic applications. It provides spatial contact information that can complement visual observations during manipulation.
+[FlexiTac](https://flexitac.github.io/) is a flexible tactile sensing platform designed for robotic manipulation. It provides spatial contact information that complements visual observations, enabling robots to perceive physical interactions that may not be visible to a camera.
 
-As part of **Mission Mimosa**, we are working on integrating FlexiTac into our visuo-tactile manipulation system. The goal is to use tactile information together with vision on our **SO101 robotic arms** and study its effect on manipulation policies.
+As part of **Mission Mimosa**, we are integrating FlexiTac with our **SO101 robotic arms** to build a visuo-tactile manipulation system. The objective is to combine visual and tactile observations and investigate their impact on robot manipulation policies.
 
-The original FlexiTac setup uses an Arduino Nano. For our implementation, we are adapting the readout system to an **ESP32 DevKit**.
+The original FlexiTac system uses an **Arduino Nano** for sensor readout. Our implementation adapts the readout system to an **ESP32 DevKit** using **ESP-IDF**.
 
 ---
 
-## Working Principle
+## Sensor Architecture
 
-FlexiTac uses a **piezoresistive sensing layer** between flexible electrode layers. When pressure is applied, the resistance of the sensing material changes. The readout electronics scan the sensing matrix and use these changes to determine where contact is occurring.
+FlexiTac uses a **piezoresistive sensing layer** placed between flexible electrode layers. When pressure is applied to the sensor, the electrical resistance of the sensing material changes. The readout electronics scan the sensing matrix and convert these changes into spatial tactile measurements.
 
-Our sensor has a **16 × 32 array**, giving a total of **512 sensing elements (taxels)**.
+Our sensor consists of a **16 × 32 sensing array**, providing:
+
+* **16 rows**
+* **32 columns**
+* **512 sensing elements (taxels)**
 
 ```text
-        Applied Pressure
-               ↓
-        ┌─────────────┐
-        │     FPC     │
-        ├─────────────┤
-        │ Piezoresistive│
-        │     Layer   │
-        ├─────────────┤
-        │     FPC     │
-        └──────┬──────┘
-               ↓
-         Readout Board
-               ↓
-             ESP32
-             
+             Applied Pressure
+                    ↓
+             ┌─────────────┐
+             │     FPC     │
+             ├─────────────┤
+             │Piezoresistive│
+             │    Layer    │
+             ├─────────────┤
+             │     FPC     │
+             └──────┬──────┘
+                    ↓
+              Readout Board
+                    ↓
+                  ESP32
 ```
-![Flexitac Sensor](../../assets/flexitac.png)
 
-For more details about the sensing mechanism, refer to the [FlexiTac paper](https://arxiv.org/abs/2604.28156).
+![FlexiTac Sensor](../../assets/flexitac.png)
+
+*FlexiTac tactile sensor used in the Mission Mimosa system.*
+
+For details about the sensing technology, see the [FlexiTac paper](https://arxiv.org/abs/2604.28156).
 
 ---
 
-##  Hardware Setup
+## Readout Electronics
 
-Our current setup consists of:
+The FlexiTac sensor is connected to a dedicated **16 × 32 readout board**, which provides the circuitry required to scan the sensing matrix.
 
-| Component       | Details          |
-| --------------- | ---------------- |
-| Tactile sensor  | FlexiTac 16 × 32 |
-| Readout board   | FlexiTac 16 × 32 |
-| Microcontroller | ESP32 DevKit     |
+The readout system can be represented as:
 
-The 16 × 32 readout board was ordered and received for the project. We first experimented with a manually assembled setup using jumper wires before moving towards a cleaner PCB-based design.
+```text
+FlexiTac Sensor
+       ↓
+Readout Board
+       ↓
+ESP32 DevKit
+       ↓
+Host Computer
+```
 
-### ESP32 Pin Mapping
+The ESP32 controls the row/column scanning and acquires the sensor measurements through its ADC interface.
+
+![Readout Board](../../assets/pcb.png)
+
+*FlexiTac 16 × 32 readout board.*
+
+---
+
+## ESP32 Integration
+
+The original FlexiTac implementation is based on an Arduino Nano. For Mission Mimosa, the readout firmware is adapted to an **ESP32 DevKit** using **ESP-IDF**.
+
+### Pin Mapping
 
 | Function             | ESP32 GPIO |
 | -------------------- | ---------: |
@@ -65,165 +86,116 @@ The 16 × 32 readout board was ordered and received for the project. We first ex
 | MUX S1               |    GPIO 33 |
 | MUX S2               |    GPIO 12 |
 
-![ Assembled FlexiTac Sensor](../../assets/fpc.png)
-
-*FlexiTac sensor used in the Mission Mimosa setup.*
+The ESP32 performs the sensor scanning and transmits the acquired tactile measurements to the host computer through serial communication.
 
 ---
 
-## Software & Readout
+## Tactile Data Pipeline
 
-The original FlexiTac implementation uses an Arduino Nano. We adapted the firmware to work with the ESP32 DevKit using **ESP-IDF**.
-
-The current data pipeline is:
+The complete tactile data pipeline is:
 
 ```text
-FlexiTac
-    ↓
-Readout Board
-    ↓
-ESP32
-    ↓
-Serial
-    ↓
-Python Visualizer
+┌──────────────────┐
+│ FlexiTac Sensor  │
+└────────┬─────────┘
+         ↓
+┌──────────────────┐
+│  Readout Board   │
+└────────┬─────────┘
+         ↓
+┌──────────────────┐
+│   ESP32 + ESP-IDF│
+└────────┬─────────┘
+         ↓
+      Serial
+         ↓
+┌──────────────────┐
+│ Python Interface │
+└────────┬─────────┘
+         ↓
+┌──────────────────┐
+│ Tactile Heatmap  │
+└──────────────────┘
 ```
 
-The ESP32 handles the readout process and sends the sensor values to the host computer, where they can be visualized as a tactile map.
+A Python-based visualization interface is used to convert the sensor readings into a spatial **16 × 32 tactile heatmap**.
 
-The firmware has been successfully flashed and the system is currently producing sensor readings.
+![FlexiTac Visualization](../../assets/visualization.gif)
 
-![Firmware flashed](../../assets/visualization.gif)
-
-*ESP32 connected to the FlexiTac readout system.*
+*Example tactile visualization of the FlexiTac sensing array.*
 
 ---
 
-## Development Progress
+## SO101 Integration
 
-### Sensor Assembly
+The tactile sensing system is designed to be integrated with **SO101 robotic arms** as an additional sensing modality alongside vision.
 
-We first assembled the FlexiTac sensor hardware and prepared it for connection to the readout electronics.
-
-The **16 × 32 readout board** was then ordered and received for testing.
-
-![Readout Board](../../assets/pcb.png)
-
-*FlexiTac sensor assembly.*
-
-### Initial Readout Attempt
-
-Before moving towards a PCB-based setup, we tried building the readout connections manually using jumper wires.
-
-The setup did not work as expected. Since there were a large number of jumper-wire connections, debugging the system was difficult and there were many possible points of failure.
-
-Because of this, we decided to move towards designing our own PCB.
-
-![Jumper Wire Setup](../../assets/jumper_wire.png)
-
-*Initial manually wired readout setup.*
-
-### ESP32 Integration
-
-We then adapted the firmware for the ESP32 DevKit.
-
-So far:
-
-* Firmware has been successfully flashed.
-* ESP32 communication with the readout system is working.
-* Sensor readings are being received.
-* The readings can be visualized on the PC.
-
----
-
-## Current Issue
-
-The main issue we are currently working on is **partial sensor response**.
-
-Only approximately half of the sensing area is responding to applied pressure, while the remaining region does not show the expected readings.
-
-The sensor appears to be divided into two regions:
+The resulting observation pipeline is:
 
 ```text
-┌──────────────────────────┐
-│                          │
-│    Responsive Region     │
-│                          │
-├──────────────────────────┤
-│                          │
-│   Non-responsive Region  │
-│                          │
-└──────────────────────────┘
+             ┌──────────┐
+             │  Camera  │
+             └────┬─────┘
+                  │
+                  ├──────────┐
+                  ↓          ↓
+             Visual Data   Tactile Data
+                  │          │
+                  └────┬─────┘
+                       ↓
+              Visual + Tactile
+                 Observation
+                       ↓
+                Learning Policy
+                       ↓
+                    SO101
 ```
 
-The exact cause has not been identified yet.
+This allows the robot to use both **visual information** and **contact information** during manipulation.
 
-
-*Current tactile visualization showing the partially responsive sensing area.*
+For additional reference, see the [LeFlexiTac documentation](https://tna001-ai.github.io/LeFlexiTac/docs.html).
 
 ---
 
-## Custom PCB
+## PyFlexiTac
 
-We are currently designing our own PCB for the FlexiTac readout system.
+[PyFlexiTac](https://github.com/FlexiTac/FlexiTac_Hardware_Repo) provides software utilities for interacting with FlexiTac hardware, including tactile streaming and visualization.
 
-The main reason for moving away from the jumper-wire setup is to reduce wiring complexity and make the system easier to debug and reproduce.
-
-**Status:** PCB design in progress.
-
-
----
-
-## Integration with SO101
-
-Once the sensor is working reliably, the next step is to deploy FlexiTac on our **SO101 robotic arms**.
-
-The planned pipeline is:
-
-```text
-       Camera
-          +
-      FlexiTac
-          ↓
- Visual + Tactile Data
-          ↓
-    Learning Policy
-          ↓
-        SO101
-```
-
-The [LeFlexiTac documentation](https://tna001-ai.github.io/LeFlexiTac/docs.html) provides a useful reference for integrating FlexiTac with a robotic manipulation setup. It covers the hardware setup, tactile sensor integration, tactile stream verification, and the overall training/reproduction workflow.
-
-### Tactile Stream
-
-The LeFlexiTac setup uses **PyFlexiTac** for flashing, checking the tactile stream and visualizing the sensor as a heatmap. Their documentation also describes a 2,000,000-baud tactile stream.
-
-For reference:
+The Python package can be installed using:
 
 ```bash
 pip install "flexitac[examples]"
 ```
 
-We will adapt this workflow to our ESP32-based setup as needed.
-
-### Rollout
-
-Once the tactile data pipeline and policy are ready, the trained policy will be deployed on the SO101 using the corresponding LeRobot rollout workflow.
-
+The FlexiTac ecosystem also supports high-speed tactile streaming. Our ESP32 implementation follows the same general concept while adapting the communication and readout system for the ESP32 platform.
 
 ---
 
-## Policy Training & Rollout
+## Visuo-Tactile Learning
 
-Once FlexiTac is fully integrated with the SO101, we plan to train and compare **ACT** and **Diffusion Policy (DP)** using visual + tactile observations.
+The long-term objective of integrating FlexiTac with the SO101 is to study whether tactile observations improve robotic manipulation compared with vision-only approaches.
 
-The main comparison will be:
+We plan to compare:
 
 ```text
-Vision only  →  ACT / DP
-Vision + Tactile → ACT / DP
+                    ┌──→ ACT
+Vision Only ────────┤
+                    └──→ Diffusion Policy
+
+
+                    ┌──→ ACT
+Vision + Tactile ──┤
+                    └──→ Diffusion Policy
 ```
 
+This provides a direct comparison between:
+
+* **Vision-only policies**
+* **Vision + tactile policies**
+* **ACT**
+* **Diffusion Policy**
+
+The tactile sensor is intended to provide additional information about **contact location, interaction, and physical state** that may be difficult to infer from vision alone.
 
 ---
 
