@@ -31,13 +31,13 @@ This can be written as:
 
 **Cleaning step** — take the current noisy action, remove a bit of predicted noise, add a small amount of fresh randomness:
 
-\(A_t^{k-1} = \alpha \left( A_t^k - \gamma \, \varepsilon_\theta(O_t, A_t^k, k) + \mathcal{N}(0, \sigma^2 I) \right)\)
+$$A_t^{k-1} = \alpha \left( A_t^k - \gamma \, \varepsilon_\theta(O_t, A_t^k, k) + \mathcal{N}(0, \sigma^2 I) \right)$$
 
 Here $A_t^k$ is the action at cleaning step $k$, $O_t$ is the current observation (image + robot state), and $\varepsilon_\theta$ is the model's guess of the noise to remove.
 
 **Training goal** — during training, we add random noise $\varepsilon^k$ to a real action and let the model guess it back, given the observation:
 
-\(L = \text{MSE}\left(\varepsilon^k, \, \varepsilon_\theta(O_t, A_t^0 + \varepsilon^k, k)\right)\)
+$$L = \text{MSE}\left(\varepsilon^k, \, \varepsilon_\theta(O_t, A_t^0 + \varepsilon^k, k)\right)$$
 
 The better the model's guessed noise matches the real noise, the lower the loss.
 
