@@ -273,6 +273,96 @@
     });
   }
 
+  /* ---------------- Success-rate charts ---------------- */
+  // A ```chart <id> <json> fence block is replaced with a theme-aware
+  // grouped bar chart. JSON is a list of groups, each with a label and an
+  // array of bars { label, value } where value is a success percentage 0-100.
+
+  function buildCharts(root) {
+    root.querySelectorAll("pre code.language-chart").forEach(function (code) {
+      var pre = code.parentElement;
+      var raw = code.textContent.trim();
+
+      // Optional second line holds the JSON; first line is an id/caption.
+      var lines = raw.split("\n");
+      var json;
+      if (lines.length > 1) json = lines.slice(1).join("\n");
+      else json = raw;
+
+      var data, err = null;
+      try {
+        data = JSON.parse(json);
+      } catch (e) {
+        err = e;
+      }
+
+      var chart = document.createElement("div");
+      chart.className = "chart";
+      if (err || !isChartData(data)) {
+        chart.innerHTML = '<h4 class="chart-error">Unable to render chart — invalid data.</h4>' +
+                          '<pre class="chart-raw">' + raw.replace(/[&<>]/g, function (c) {
+                            return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c];
+                          }) + "</pre>";
+        pre.parentNode.replaceChild(chart, pre);
+        return;
+      }
+
+      var maxVal = 100;
+      data.forEach(function (g) {
+        g.bars.forEach(function (b) { if (b.value > maxVal) maxVal = b.value; });
+      });
+
+      var grid = '<div class="chart-grid">' +
+                 '<span class="chart-rmax">' + maxVal + '%</span>' +
+                 '<span class="chart-half">' + Math.round(maxVal / 2) + '%</span>' +
+                 '<span class="chart-r0">0%</span>' +
+                 '</div>';
+
+      var groups = data.map(function (g) {
+        var bars = g.bars.map(function (b) {
+          var pct = (b.value / maxVal) * 100;
+          return '<div class="chart-bar" style="height:' + pct.toFixed(2) + '%" ' +
+                 'aria-label="' + esc(b.label) + ': ' + b.value + '%">' +
+                 '<span class="chart-val">' + b.value + '%</span>' +
+                 '<span class="chart-lab">' + esc(b.label) + '</span>' +
+                 '</div>';
+        }).join("");
+        return '<div class="chart-group"><div class="chart-bars">' + bars + '</div>' +
+               '<div class="chart-grouplab">' + esc(g.label) + "</div></div>";
+      }).join("");
+
+      var legend = '<div class="chart-legend">' +
+                   '<span class="chart-legend-item"><i class="sw-v"></i>Vision</span>' +
+                   '<span class="chart-legend-item"><i class="sw-vt"></i>Vision + Tactile</span>' +
+                   '</div>';
+
+      chart.innerHTML = '<div class="chart-head"><span class="chart-title">Success Rate Comparison</span>' + legend + "</div>" +
+                        '<div class="chart-body">' + grid + '<div class="chart-groups">' + groups + "</div></div>";
+
+      // Distinguish tactile vs vision bars visually by their label text.
+      chart.querySelectorAll(".chart-bar").forEach(function (bar) {
+        var lab = bar.querySelector(".chart-lab").textContent;
+        bar.classList.add(/tactile/i.test(lab) ? "is-tactile" : "is-vision");
+      });
+
+      pre.parentNode.replaceChild(chart, pre);
+    });
+  }
+
+  function isChartData(d) {
+    return Array.isArray(d) && d.length && d.every(function (g) {
+      return g && typeof g.label === "string" && Array.isArray(g.bars) &&
+             g.bars.every(function (b) {
+               return b && typeof b.label === "string" && typeof b.value === "number";
+             });
+    });
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
   function render() {
     var rawKey = currentKey();
     var key = ROUTES[rawKey] ? rawKey : "";
@@ -289,6 +379,7 @@
     fetchDoc(route.file).then(function (md) {
       docEl.innerHTML = window.marked.parse(md);
       decorate(docEl);
+      buildCharts(docEl);
       buildToc(docEl);
 
       var h1 = docEl.querySelector("h1");

@@ -4,7 +4,7 @@
 
 ACT is one of the imitation learning approaches implemented for the SO-101 arm. Instead of predicting one action at a time, it predicts a short **chunk** of future actions in one go, then executes them before predicting the next chunk. This reduces the small errors that build up over time when a robot predicts actions one step at a time.
 
-Currently trained and tested using **vision-only** input (RGB camera feed). Tactile input (FlexiTac, eFlesh) will be added later.
+The Mission Mimosa setup evaluates ACT using both **vision-only** input and **vision + tactile** input. The tactile setup can incorporate sensors such as FlexiTac and eFlesh alongside the RGB camera observations.
 
 ---
 
@@ -18,7 +18,7 @@ Currently trained and tested using **vision-only** input (RGB camera feed). Tact
 
 ## How It Works (Simple Explanation)
 
-1. The policy looks at the current observation (camera image + robot state).
+1. The policy looks at the current observation (camera image + robot state, with tactile observations when enabled).
 2. Instead of predicting the next single action, it predicts a whole short sequence of future actions at once (a **chunk**).
 3. The robot executes some of these actions, then looks again and predicts the next chunk.
 4. Overlapping chunks are blended together so the motion stays smooth instead of jumping between chunks.
@@ -29,7 +29,7 @@ Currently trained and tested using **vision-only** input (RGB camera feed). Tact
 
 ## Setup / Architecture
 
-* **Input:** RGB images + robot state (joint positions/end-effector pose)
+* **Input:** RGB images + robot state, with tactile observations for the tactile configuration
 * **Vision Encoder:** ResNet-18
 * **Action space:** Joint positions
 * **Chunk size:** 16
@@ -115,25 +115,47 @@ The important components of the rollout command are:
 | `--display_data`  | Displays the observation/inference data    |
 | `--duration`      | Duration of the rollout                    |
 
-**Reference:** [LeRobot ACT Documentation](https://huggingface.co/docs/lerobot/act)
-
 ---
 
 ## Media
 
 ### Demo / Rollout Videos
 
-![ACT Rollout](../../assets/ACT_inference_failed.gif)
+#### ACT — Without Tactile
+
+![ACT Rollout Without Tactile](../../assets/act_without_tactile.gif)
+
+#### ACT — With Tactile
+
+![ACT Rollout With Tactile](../../assets/act_with_tactile.gif)
 
 ### Architecture Diagram
 
 ![Action Chunking + Temporal Assembly](../../assets/Architecture.png)
 
 ---
+## Success Rate Comparison
+
+The following table compares the success rates of ACT under **vision-only** and **vision + tactile** sensing configurations.
+
+| Configuration    | Success Rate |
+| ---------------- | -----------: |
+| Vision(50eps)    |          80% |
+| Vision + Tactile(50eps) |          90% |
+| Vision + Tactile(20eps) |          50% |
+
+The results show the performance difference between using visual observations alone and augmenting the policy with tactile observations.
 
 ## Known Issues / Limitations
 
-* Motion is still jerky.
-* We are still facing failures.
-* The arm isn't going for the cube in the current rollout.
+* Motion can still be jerky during execution.
+* Some task failures remain during rollout.
+* Performance can vary between vision-only and tactile configurations.
+
+---
+
+## References
+
+1. A. Zhao, H. Huang, D. Xu, J. Li, Y. Zhang, H. Qi, and L. Guo, **"Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware,"** *arXiv preprint arXiv:2304.13705*, 2023.
+2. Hugging Face, **LeRobot — ACT Documentation**: https://huggingface.co/docs/lerobot/act
 

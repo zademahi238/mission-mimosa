@@ -519,6 +519,99 @@ body[data-route=""] .markdown-body > h1:first-child + p + p { display: none; }
   border-radius: var(--radius); padding: 12px 16px; font-size: 12.5px;
 }
 
+/* ---------- Success-rate charts ---------- */
+.chart {
+  margin: 0 0 1.6em;
+  padding: 18px 20px 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-elev);
+}
+.chart-error { color: var(--danger); font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; margin: 0 0 8px; }
+.chart-raw { margin: 0; padding: 10px 12px; background: var(--panel-dark); color: var(--panel-dark-text); border-radius: var(--radius); font-size: 12px; overflow-x: auto; }
+.chart-head {
+  display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+.chart-title {
+  font-family: var(--font-mono); font-size: 12px; font-weight: 400;
+  letter-spacing: .06em; text-transform: uppercase; color: var(--text-soft);
+}
+.chart-legend { display: flex; gap: 16px; flex-wrap: wrap; font-family: var(--font-mono); font-size: 11px; letter-spacing: .03em; color: var(--text-soft); }
+.chart-legend-item { display: inline-flex; align-items: center; gap: 6px; }
+.chart-legend-item i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+.chart-legend-item .sw-v { background: var(--accent-bright); }
+.chart-legend-item .sw-vt { background: var(--accent); }
+
+.chart-body {
+  position: relative;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 8px;
+}
+.chart-grid {
+  display: flex; flex-direction: column; justify-content: space-between;
+  align-items: flex-end;
+  font-family: var(--font-mono); font-size: 10px; color: var(--text-faint);
+  padding-bottom: 4px;
+}
+.chart-groups {
+  display: grid;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  gap: 22px;
+  align-items: end;
+}
+.chart-group { display: flex; flex-direction: column; min-width: 0; }
+.chart-bars {
+  position: relative;
+  height: 200px;
+  display: flex; align-items: flex-end; justify-content: center; gap: 8px;
+  padding: 6px 0 0;
+  border-bottom: 1px solid var(--border-strong);
+  background-image: linear-gradient(to top, var(--border) 1px, transparent 1px);
+  background-size: 100% 33.333%;
+  background-position: bottom;
+}
+.chart-bar {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+  flex: 1;
+  min-width: 26px;
+  max-width: 58px;
+}
+.chart-bar.is-vision {
+  background: var(--accent-bright);
+  border: 1px solid color-mix(in srgb, var(--accent-bright) 60%, var(--border-strong));
+}
+.chart-bar.is-tactile {
+  background: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 60%, var(--border-strong));
+}
+.chart-val {
+  position: absolute; top: -8px; transform: translateY(-100%);
+  font-family: var(--font-mono); font-size: 11px; color: var(--text);
+  white-space: nowrap;
+}
+.chart-lab {
+  margin-top: 8px;
+  font-family: var(--font-mono); font-size: 10.5px; line-height: 1.3;
+  color: var(--text-soft); text-align: center;
+}
+.chart-grouplab {
+  margin-top: 12px; padding-top: 8px;
+  font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+  letter-spacing: .06em; text-transform: uppercase; text-align: center;
+  color: var(--text);
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 560px) {
+  .chart-groups { gap: 12px; }
+  .chart-bar { min-width: 20px; }
+  .chart-lab { font-size: 9px; }
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 1120px) {
   .content { display: block; max-width: var(--maxw); }
