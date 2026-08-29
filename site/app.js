@@ -275,23 +275,19 @@
 
   /* ---------------- Success-rate charts ---------------- */
   // A ```chart <id> <json> fence block is replaced with a theme-aware
-  // grouped bar chart. JSON is a list of groups, each with a label and an
-  // array of bars { label, value } where value is a success percentage 0-100.
+  // grouped bar chart. The block content is the JSON only (the optional
+  // caption after "chart" is consumed by the parser's info string, not the
+  // body). JSON is a list of groups, each with a label and an array of bars
+  // { label, value } where value is a success percentage 0-100.
 
   function buildCharts(root) {
     root.querySelectorAll("pre code.language-chart").forEach(function (code) {
       var pre = code.parentElement;
       var raw = code.textContent.trim();
 
-      // Optional second line holds the JSON; first line is an id/caption.
-      var lines = raw.split("\n");
-      var json;
-      if (lines.length > 1) json = lines.slice(1).join("\n");
-      else json = raw;
-
       var data, err = null;
       try {
-        data = JSON.parse(json);
+        data = JSON.parse(raw);
       } catch (e) {
         err = e;
       }
