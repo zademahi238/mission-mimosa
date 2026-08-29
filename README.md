@@ -76,18 +76,18 @@ Each setup is evaluated using **task-completion success rate** across manipulati
   {
     "label": "ACT",
     "bars": [
-      { "label": "Vision (50 eps)", "value": 80 },
-      { "label": "Vision + Tactile (50 eps)", "value": 90 },
-      { "label": "Vision + Tactile (20 eps)", "value": 50 }
+      { "label": "50 eps", "value": 80, "series": "Vision" },
+      { "label": "50 eps", "value": 90, "series": "Vision + Tactile" },
+      { "label": "20 eps", "value": 50, "series": "Vision + Tactile" }
     ]
   },
   {
     "label": "SmolVLA",
     "bars": [
-      { "label": "Vision (50 eps)", "value": 70 },
-      { "label": "Vision (20 eps)", "value": 30 },
-      { "label": "Vision + Tactile (50 eps)", "value": 50 },
-      { "label": "Vision + Tactile (20 eps)", "value": 70 }
+      { "label": "50 eps", "value": 70, "series": "Vision" },
+      { "label": "20 eps", "value": 30, "series": "Vision" },
+      { "label": "50 eps", "value": 50, "series": "Vision + Tactile" },
+      { "label": "20 eps", "value": 70, "series": "Vision + Tactile" }
     ]
   }
 ]

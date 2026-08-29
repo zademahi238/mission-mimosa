@@ -13,7 +13,7 @@
     "":         { file: "README.md",                              nav: "" },
     "act":      { file: "docs/imitation-learning/ACT.md",         nav: "act" },
     "diffusion":{ file: "docs/imitation-learning/diffusion_policy.md", nav: "diffusion" },
-    "bspline":  { file: "docs/imitation-learning/bspline_policy_updated.md", nav: "bspline" },
+    "bspline":  { file: "docs/imitation-learning/Bspline_policy.md", nav: "bspline" },
     "flexitac": { file: "docs/tactile-sensors/flexitac.md",       nav: "flexitac" },
     "eflesh":   { file: "docs/tactile-sensors/eflesh.md",         nav: "eflesh" }
   };
@@ -274,11 +274,18 @@
   }
 
   /* ---------------- Success-rate charts ---------------- */
-  // A ```chart <id> <json> fence block is replaced with a theme-aware
-  // grouped bar chart. The block content is the JSON only (the optional
-  // caption after "chart" is consumed by the parser's info string, not the
-  // body). JSON is a list of groups, each with a label and an array of bars
-  // { label, value } where value is a success percentage 0-100.
+  // A ```chart <json> fence block is replaced with a theme-aware grouped
+  // bar chart, styled to match the π0.5 ablation-chart aesthetic. The block
+  // content is the JSON only (any caption after "chart" is consumed by the
+  // parser's info string, not the body). JSON is a list of groups:
+  //   { "label": "ACT", "bars": [ { "label": "Vision (50 eps)",
+  //                                  "value": 80, "series": "Vision" }, ... ] }
+  // Each bar may carry a "series" key; bars sharing the same series get the
+  // same color across groups, and the legend is built from the series list.
+
+  var CHART_SERIES_CLASSES = [
+    "ch-s1", "ch-s2", "ch-s3", "ch-s4", "ch-s5", "ch-s6", "ch-s7", "ch-s8"
+  ];
 
   function buildCharts(root) {
     root.querySelectorAll("pre code.language-chart").forEach(function (code) {
@@ -303,46 +310,83 @@
         return;
       }
 
+      // Normalise the axis to 0..100 by default, extending if any value exceeds it.
       var maxVal = 100;
       data.forEach(function (g) {
         g.bars.forEach(function (b) { if (b.value > maxVal) maxVal = b.value; });
       });
+      var ticks = makeTicks(maxVal);
 
-      var grid = '<div class="chart-grid">' +
-                 '<span class="chart-rmax">' + maxVal + '%</span>' +
-                 '<span class="chart-half">' + Math.round(maxVal / 2) + '%</span>' +
-                 '<span class="chart-r0">0%</span>' +
-                 '</div>';
+      // Build the legend from the declared series, keeping first-seen order.
+      var seriesOrder = [];
+      data.forEach(function (g) {
+        g.bars.forEach(function (b) {
+          if (b.series && seriesOrder.indexOf(b.series) === -1) seriesOrder.push(b.series);
+        });
+      });
+      var legendItems = seriesOrder.map(function (name, i) {
+        return '<span class="chart-legend-item"><i class="' +
+               CHART_SERIES_CLASSES[i % CHART_SERIES_CLASSES.length] + '"></i>' +
+               esc(name) + "</span>";
+      }).join("");
+      var legend = legendItems
+        ? '<div class="chart-legend">' + legendItems + "</div>"
+        : "";
+
+      var grid = ticks.map(function (t) {
+        return '<span class="chart-tick" style="bottom:' + t.pct + '%">' + t.label + "</span>";
+      }).join("");
 
       var groups = data.map(function (g) {
-        var bars = g.bars.map(function (b) {
+        var bars = g.bars.map(function (b, i) {
           var pct = (b.value / maxVal) * 100;
-          return '<div class="chart-bar" style="height:' + pct.toFixed(2) + '%" ' +
-                 'aria-label="' + esc(b.label) + ': ' + b.value + '%">' +
+          var seriesClass = "";
+          if (b.series) {
+            var si = seriesOrder.indexOf(b.series);
+            if (si >= 0) seriesClass = CHART_SERIES_CLASSES[si % CHART_SERIES_CLASSES.length];
+          }
+          return '<div class="chart-bar ' + seriesClass + '" style="height:' + pct.toFixed(2) + '%" ' +
+                 'role="img" aria-label="' + esc(b.label) + ': ' + b.value + '% success">' +
                  '<span class="chart-val">' + b.value + '%</span>' +
-                 '<span class="chart-lab">' + esc(b.label) + '</span>' +
                  '</div>';
         }).join("");
-        return '<div class="chart-group"><div class="chart-bars">' + bars + '</div>' +
+        var barLabels = g.bars.map(function (b) {
+          return '<span class="chart-bl">' + esc(b.label) + "</span>";
+        }).join("");
+        return '<div class="chart-group"><div class="chart-bars">' + bars + "</div>" +
+               '<div class="chart-barlabels">' + barLabels + "</div>" +
                '<div class="chart-grouplab">' + esc(g.label) + "</div></div>";
       }).join("");
 
-      var legend = '<div class="chart-legend">' +
-                   '<span class="chart-legend-item"><i class="sw-v"></i>Vision</span>' +
-                   '<span class="chart-legend-item"><i class="sw-vt"></i>Vision + Tactile</span>' +
-                   '</div>';
-
-      chart.innerHTML = '<div class="chart-head"><span class="chart-title">Success Rate Comparison</span>' + legend + "</div>" +
-                        '<div class="chart-body">' + grid + '<div class="chart-groups">' + groups + "</div></div>";
-
-      // Distinguish tactile vs vision bars visually by their label text.
-      chart.querySelectorAll(".chart-bar").forEach(function (bar) {
-        var lab = bar.querySelector(".chart-lab").textContent;
-        bar.classList.add(/tactile/i.test(lab) ? "is-tactile" : "is-vision");
-      });
+      chart.innerHTML =
+        '<div class="chart-head">' +
+          '<span class="chart-title">Success Rate</span>' + legend +
+        "</div>" +
+        '<div class="chart-body">' +
+          '<div class="chart-meta">' + grid + "</div>" +
+          '<div class="chart-plot"><div class="chart-groups">' + groups + "</div></div>" +
+        "</div>" +
+        '<div class="chart-xlabel">Configuration</div>';
 
       pre.parentNode.replaceChild(chart, pre);
     });
+  }
+
+  // Pick "nice" 0-100 axis ticks (100/80/60/40/20/0, or adapt step for maxVal).
+  function makeTicks(max) {
+    var step, ticks = [], target = 5;
+    if (max <= 20) step = 5;
+    else if (max <= 50) step = 10;
+    else if (max <= 100) step = 100 / target; // 20
+    else step = Math.ceil(max / target / 10) * 10;
+    for (var v = 0; v <= max; v += step) {
+      ticks.push({ pct: (v / max) * 100, label: v + "%" });
+    }
+    var top = ticks[ticks.length - 1];
+    if (top.pct < 100 && top.label !== "100%") {
+      ticks.push({ pct: 100, label: max + "%" });
+    }
+    return ticks;
   }
 
   function isChartData(d) {
