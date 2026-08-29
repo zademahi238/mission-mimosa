@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mission Mimosa — A Visuo-Tactile Manipulation System</title>
+<meta name="description" content="Mission Mimosa explores visuo-tactile manipulation on the SO-101 robotic arm by combining camera observations with tactile sensing." />
+
+<meta property="og:title" content="Mission Mimosa" />
+<meta property="og:description" content="A Visuo-Tactile Manipulation System — giving robots a sense of touch." />
+<meta property="og:type" content="website" />
+
+<link rel="stylesheet" href="site/vendor/katex/katex.min.css" />
+<link rel="stylesheet" href="site/style.css" />
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem("mm-theme");
+      if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  })();
+</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230d0d0d'/%3E%3Crect x='7' y='7' width='8' height='8' fill='%23aef280'/%3E%3Crect x='17' y='7' width='8' height='8' fill='%23e7e5da'/%3E%3Crect x='7' y='17' width='8' height='8' fill='%23e7e5da'/%3E%3Crect x='17' y='17' width='8' height='8' fill='%23aef280'/%3E%3C/svg%3E" />
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to content</a>
+
+<header class="topbar">
+  <button id="menu-toggle" class="icon-btn" aria-label="Toggle navigation" aria-expanded="false">
+    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+  </button>
+  <a class="topbar-title" href="#/">Mission&nbsp;Mimosa</a>
+  <div class="topbar-spacer"></div>
+  <a class="icon-btn" id="repo-link" href="https://github.com/zademahi238/mission-mimosa" target="_blank" rel="noopener" aria-label="View source on GitHub">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.79 1.2 1.79 1.2 1.04 1.79 2.73 1.27 3.4.97.1-.76.4-1.27.74-1.56-2.56-.29-5.26-1.28-5.26-5.7 0-1.26.45-2.29 1.2-3.1-.13-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.5 3.17-1.18 3.17-1.18.63 1.6.24 2.76.12 3.05.75.81 1.2 1.84 1.2 3.1 0 4.43-2.7 5.4-5.28 5.69.42.36.79 1.06.79 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
+  </a>
+  <button class="icon-btn" id="theme-toggle" aria-label="Toggle color theme">
+    <svg class="i-sun" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm0-5h0v3m0 14v3M4.2 4.2l2.1 2.1m11.4 11.4 2.1 2.1M2 12h3m14 0h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>
+    <svg class="i-moon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+  </button>
+</header>
+
+<div class="layout">
+  <nav id="sidebar" class="sidebar" aria-label="Documentation">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+      <span class="brand-text">
+        <strong>Mission Mimosa</strong>
+        <em>Giving robots a sense of touch</em>
+      </span>
+    </div>
+
+    <a class="nav-link" data-route="" href="#/">Overview</a>
+
+    <p class="nav-group">Imitation Learning</p>
+    <a class="nav-link" data-route="act" href="#/act">ACT</a>
+    <a class="nav-link" data-route="diffusion" href="#/diffusion">Diffusion Policy</a>
+    <a class="nav-link" data-route="bspline" href="#/bspline">B-Spline Policy</a>
+
+    <p class="nav-group">Tactile Sensors</p>
+    <a class="nav-link" data-route="flexitac" href="#/flexitac">FlexiTac</a>
+    <a class="nav-link" data-route="eflesh" href="#/eflesh">eFlesh</a>
+
+    <div class="nav-footer">
+      <a href="https://github.com/zademahi238/mission-mimosa" target="_blank" rel="noopener">Source repository ↗</a>
+    </div>
+  </nav>
+
+  <div id="scrim" class="scrim" hidden></div>
+
+  <main id="content" class="content" tabindex="-1">
+    <noscript>
+      <p style="padding:40px">This site renders the project documentation with JavaScript.
+      Please enable JavaScript, or browse the Markdown files directly on
+      <a href="https://github.com/zademahi238/mission-mimosa">GitHub</a>.</p>
+    </noscript>
+
+    <section id="hero">
+      <video id="hero-video" class="hero-media"
+             src="assets/hero.mp4" poster="assets/hero-poster.jpg"
+             autoplay muted loop playsinline preload="metadata"></video>
+      <div class="hero-scrim"></div>
+      <div class="hero-inner">
+        <p class="eyebrow hero-eyebrow">Visuo-Tactile Manipulation &middot; SO-101</p>
+        <h1 class="hero-title">Mission Mimosa</h1>
+        <p class="hero-sub">Giving robots a sense of touch.</p>
+      </div>
+      <div class="hero-fade" aria-hidden="true"></div>
+    </section>
+
+    <article id="doc" class="doc markdown-body"></article>
+    <aside id="toc" class="toc" aria-label="On this page"></aside>
+  </main>
+</div>
+
+<script src="site/vendor/marked.min.js"></script>
+<script src="site/vendor/katex/katex.min.js"></script>
+<script src="site/app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
+.vscode/
+
+# Node (in case tooling is added later)
+node_modules/
+npm-debug.log*
+yarn-error.log
+
+# Local scratch / previews / renders — never commit these
+/scratch/
+/tmp/
+*.log
+screenshot*.png
+render*.png
