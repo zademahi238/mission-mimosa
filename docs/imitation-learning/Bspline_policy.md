@@ -116,15 +116,10 @@ N_{i,0}(u)=
 \end{cases}
 $$
 
-For $p > 0$:
+For $p > 0$, the B-Spline basis functions are defined recursively as:
 
 $$
-N_{i,p}(u)
-=
-\frac{u-t_i}{t_{i+p}-t_i}N_{i,p-1}(u)
-+
-\frac{t_{i+p+1}-u}{t_{i+p+1}-t_{i+1}}
-N_{i+1,p-1}(u)
+N_{i,p}(u) = \frac{u-t_i}{t_{i+p}-t_i} N_{i,p-1}(u) + \frac{t_{i+p+1}-u}{t_{i+p+1}-t_{i+1}} N_{i+1,p-1}(u)
 $$
 
 Terms with zero denominators are treated as zero.
@@ -410,48 +405,22 @@ During inference, consecutive B-Spline trajectory segments need to be aligned so
 Let the end of the current trajectory segment be represented by:
 
 $$
-a_{\text{current}}(u)
+a_{\mathrm{current}}(u)
 $$
 
 and a candidate point in the next predicted trajectory be represented by:
 
 $$
-a_{\text{next}}(v)
+a_{\mathrm{next}}(v)
 $$
 
-The alignment error between the two trajectory states can be expressed as:
+The alignment error between the two trajectory states is:
 
 $$
-E(u,v)
-=
-\left\|
-a_{\text{current}}(u)
--
-a_{\text{next}}(v)
-\right\|_2
+E(u,v) = \left\| a_{\mathrm{current}}(u) - a_{\mathrm{next}}(v) \right\|_2
 $$
 
-The alignment procedure searches over a permitted portion of the next trajectory and selects the candidate alignment with the lowest error:
-
-$$
-(u^*,v^*)
-=
-\underset{(u,v)\in\mathcal{S}}{\operatorname{argmin}}
-\;
-E(u,v)
-$$
-
-where $\mathcal{S}$ is the search region defined by `align_max_fraction`.
-
-An alignment is accepted only when:
-
-$$
-E(u^*,v^*)
-\leq
-\texttt{align\_error\_threshold}
-$$
-
-This allows the newly generated B-Spline segment to be connected to the currently executing segment without introducing a large discontinuity.
+The alignment procedure searches over a permitted portion of the next trajectory and selects the candidate alignment with the lowest error.
 
 ### Alignment Process
 
