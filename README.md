@@ -71,6 +71,28 @@ The core experiment compares two observation settings:
 
 Each setup is evaluated using **task-completion success rate** across manipulation tasks and different learning policies.
 
+```chart Success Rate Comparison
+[
+  {
+    "label": "ACT",
+    "bars": [
+      { "label": "Vision (50 eps)", "value": 80 },
+      { "label": "Vision + Tactile (50 eps)", "value": 90 },
+      { "label": "Vision + Tactile (20 eps)", "value": 50 }
+    ]
+  },
+  {
+    "label": "SmolVLA",
+    "bars": [
+      { "label": "Vision (50 eps)", "value": 70 },
+      { "label": "Vision (20 eps)", "value": 30 },
+      { "label": "Vision + Tactile (50 eps)", "value": 50 },
+      { "label": "Vision + Tactile (20 eps)", "value": 70 }
+    ]
+  }
+]
+```
+
 This comparison helps isolate the contribution of tactile sensing and determine whether contact information leads to more reliable manipulation.
 
 ---
