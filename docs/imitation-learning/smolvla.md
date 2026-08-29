@@ -146,8 +146,10 @@ The tactile-enabled policy uses visual observations together with tactile observ
 
 | Setup            | Vision | Tactile | Success Rate |
 | :--------------- | :----: | :-----: | :----------: |
-| Vision Only      |    ✓   |    —    |       —      |
-| Vision + Tactile |    ✓   |    ✓    |       —      |
+| Vision Only(50eps) |    ✓   |    —    |       7/10      |
+| Vision Only(20eps) |    ✓   |    —    |       3/10      |
+| Vision + Tactile (50eps) |    ✓   |    ✓    |       5/10      |
+| Vision + Tactile (20eps) |    ✓   |    ✓    |       7/10      |
 
 ---
 
