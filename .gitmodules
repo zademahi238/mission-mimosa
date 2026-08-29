@@ -1,12 +1,6 @@
-[submodule "lerobot"]
-	path = lerobot
-	url = https://github.com/huggingface/lerobot.git
-[submodule "bspline"]
-	path = bspline
+[submodule "bspline_lerobot"]
+	path = bspline_lerobot
 	url = https://github.com/zademahi238/mimosa.git
-[submodule "flexitac"]
-	path = flexitac
-	url = https://github.com/FlexiTac/FlexiTac_Hardware_Repo.git
 [submodule "leflexitac"]
 	path = leflexitac
 	url = https://github.com/TNA001-AI/lerobot_tactile.git
