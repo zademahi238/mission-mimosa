@@ -1,0 +1,3 @@
+[submodule "bspline_lerobot"]
+	path = bspline_lerobot
+	url = https://github.com/zademahi238/mimosa.git
