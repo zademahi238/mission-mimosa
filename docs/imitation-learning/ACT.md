@@ -134,6 +134,17 @@ The important components of the rollout command are:
 ![Action Chunking + Temporal Assembly](../../assets/Architecture.png)
 
 ---
+## Success Rate Comparison
+
+The following table compares the success rates of ACT under **vision-only** and **vision + tactile** sensing configurations.
+
+| Configuration    | Success Rate |
+| ---------------- | -----------: |
+| Vision(50eps)    |          80% |
+| Vision + Tactile(50eps) |          90% |
+| Vision + Tactile(20eps) |          50% |
+
+The results show the performance difference between using visual observations alone and augmenting the policy with tactile observations.
 
 ## Known Issues / Limitations
 
